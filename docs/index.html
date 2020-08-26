@@ -32,7 +32,10 @@ def main():
     password = 'password'
     base_url = 'example.com'
 
-    sc = Sc(username, password, base_url)
+    # change password
+    sc.change_password(original_password=password, new_password='ChangeMeAgain')
+
+    # create a new user &amp; give them "user" permissions
     role_id_map = sc.get_role_id_map()
     user_role_id = role_id_map['user']
     sc.create_user('lab10', 'password', user_role_id)
@@ -63,7 +66,10 @@ if __name__ == '__main__':
         password = &#39;password&#39;
         base_url = &#39;example.com&#39;
 
-        sc = Sc(username, password, base_url)
+        # change password
+        sc.change_password(original_password=password, new_password=&#39;ChangeMeAgain&#39;)
+
+        # create a new user &amp; give them &#34;user&#34; permissions
         role_id_map = sc.get_role_id_map()
         user_role_id = role_id_map[&#39;user&#39;]
         sc.create_user(&#39;lab10&#39;, &#39;password&#39;, user_role_id)
