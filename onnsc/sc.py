@@ -30,7 +30,7 @@ class Sc:
 
         return output_json
 
-    def _api_call(self, verb, endpoint, payload='', auth=True):
+    def _api_call(self, verb, endpoint, payload='', auth=True, query_params=None):
         headers = {
             'Content-type': 'application/json',
         }
@@ -40,7 +40,12 @@ class Sc:
 
         path = f'{self.base_url}/{endpoint}'
         call_verb = getattr(requests, verb.lower())
-        request_output = call_verb(path, headers=headers, json=payload, verify=False)
+
+        if query_params:
+            request_output = call_verb(path, headers=headers, json=payload, verify=False, params=query_params)
+
+        else:
+            request_output = call_verb(path, headers=headers, json=payload, verify=False)
 
         output_json = request_output.json()
 
@@ -96,5 +101,26 @@ class Sc:
             }
 
         output_json = self._api_call('POST', f'api/users', payload, auth=True)
+
+        return output_json
+
+    def create_registry(self, registry_hostname, registry_name, registry_region, registry_description='',
+                        insecure_skip_verify='false'):
+
+        payload = {
+            'host': registry_hostname,
+            'name': registry_name,
+            'description': registry_description,
+            'insecure_skip_verify': insecure_skip_verify,
+            'credentials': {
+                'aws': {
+                    'region': registry_region,
+                }
+            }
+        }
+
+        query_params = {'scan': 'true'}
+
+        output_json = self._api_call('POST', f'api/registries', payload, auth=True, query_params=query_params)
 
         return output_json

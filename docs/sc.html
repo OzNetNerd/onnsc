@@ -58,7 +58,7 @@ class Sc:
 
         return output_json
 
-    def _api_call(self, verb, endpoint, payload=&#39;&#39;, auth=True):
+    def _api_call(self, verb, endpoint, payload=&#39;&#39;, auth=True, query_params=None):
         headers = {
             &#39;Content-type&#39;: &#39;application/json&#39;,
         }
@@ -68,7 +68,12 @@ class Sc:
 
         path = f&#39;{self.base_url}/{endpoint}&#39;
         call_verb = getattr(requests, verb.lower())
-        request_output = call_verb(path, headers=headers, json=payload, verify=False)
+
+        if query_params:
+            request_output = call_verb(path, headers=headers, json=payload, verify=False, params=query_params)
+
+        else:
+            request_output = call_verb(path, headers=headers, json=payload, verify=False)
 
         output_json = request_output.json()
 
@@ -124,6 +129,27 @@ class Sc:
             }
 
         output_json = self._api_call(&#39;POST&#39;, f&#39;api/users&#39;, payload, auth=True)
+
+        return output_json
+
+    def create_registry(self, registry_hostname, registry_name, registry_region, registry_description=&#39;&#39;,
+                        insecure_skip_verify=&#39;false&#39;):
+
+        payload = {
+            &#39;host&#39;: registry_hostname,
+            &#39;name&#39;: registry_name,
+            &#39;description&#39;: registry_description,
+            &#39;insecure_skip_verify&#39;: insecure_skip_verify,
+            &#39;credentials&#39;: {
+                &#39;aws&#39;: {
+                    &#39;region&#39;: registry_region,
+                }
+            }
+        }
+
+        query_params = {&#39;scan&#39;: &#39;true&#39;}
+
+        output_json = self._api_call(&#39;POST&#39;, f&#39;api/registries&#39;, payload, auth=True, query_params=query_params)
 
         return output_json</code></pre>
 </details>
@@ -170,7 +196,7 @@ class Sc:
 
         return output_json
 
-    def _api_call(self, verb, endpoint, payload=&#39;&#39;, auth=True):
+    def _api_call(self, verb, endpoint, payload=&#39;&#39;, auth=True, query_params=None):
         headers = {
             &#39;Content-type&#39;: &#39;application/json&#39;,
         }
@@ -180,7 +206,12 @@ class Sc:
 
         path = f&#39;{self.base_url}/{endpoint}&#39;
         call_verb = getattr(requests, verb.lower())
-        request_output = call_verb(path, headers=headers, json=payload, verify=False)
+
+        if query_params:
+            request_output = call_verb(path, headers=headers, json=payload, verify=False, params=query_params)
+
+        else:
+            request_output = call_verb(path, headers=headers, json=payload, verify=False)
 
         output_json = request_output.json()
 
@@ -237,6 +268,27 @@ class Sc:
 
         output_json = self._api_call(&#39;POST&#39;, f&#39;api/users&#39;, payload, auth=True)
 
+        return output_json
+
+    def create_registry(self, registry_hostname, registry_name, registry_region, registry_description=&#39;&#39;,
+                        insecure_skip_verify=&#39;false&#39;):
+
+        payload = {
+            &#39;host&#39;: registry_hostname,
+            &#39;name&#39;: registry_name,
+            &#39;description&#39;: registry_description,
+            &#39;insecure_skip_verify&#39;: insecure_skip_verify,
+            &#39;credentials&#39;: {
+                &#39;aws&#39;: {
+                    &#39;region&#39;: registry_region,
+                }
+            }
+        }
+
+        query_params = {&#39;scan&#39;: &#39;true&#39;}
+
+        output_json = self._api_call(&#39;POST&#39;, f&#39;api/registries&#39;, payload, auth=True, query_params=query_params)
+
         return output_json</code></pre>
 </details>
 <h3>Methods</h3>
@@ -257,6 +309,37 @@ class Sc:
         }
 
     output_json = self._api_call(&#39;POST&#39;, f&#39;api/users/{self.user_id}/password&#39;, payload, auth=True)
+
+    return output_json</code></pre>
+</details>
+</dd>
+<dt id="onnsc.sc.Sc.create_registry"><code class="name flex">
+<span>def <span class="ident">create_registry</span></span>(<span>self, registry_hostname, registry_name, registry_region, registry_description='', insecure_skip_verify='false')</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def create_registry(self, registry_hostname, registry_name, registry_region, registry_description=&#39;&#39;,
+                    insecure_skip_verify=&#39;false&#39;):
+
+    payload = {
+        &#39;host&#39;: registry_hostname,
+        &#39;name&#39;: registry_name,
+        &#39;description&#39;: registry_description,
+        &#39;insecure_skip_verify&#39;: insecure_skip_verify,
+        &#39;credentials&#39;: {
+            &#39;aws&#39;: {
+                &#39;region&#39;: registry_region,
+            }
+        }
+    }
+
+    query_params = {&#39;scan&#39;: &#39;true&#39;}
+
+    output_json = self._api_call(&#39;POST&#39;, f&#39;api/registries&#39;, payload, auth=True, query_params=query_params)
 
     return output_json</code></pre>
 </details>
@@ -376,6 +459,7 @@ class Sc:
 <h4><code><a title="onnsc.sc.Sc" href="#onnsc.sc.Sc">Sc</a></code></h4>
 <ul class="two-column">
 <li><code><a title="onnsc.sc.Sc.change_password" href="#onnsc.sc.Sc.change_password">change_password</a></code></li>
+<li><code><a title="onnsc.sc.Sc.create_registry" href="#onnsc.sc.Sc.create_registry">create_registry</a></code></li>
 <li><code><a title="onnsc.sc.Sc.create_user" href="#onnsc.sc.Sc.create_user">create_user</a></code></li>
 <li><code><a title="onnsc.sc.Sc.get_role_id_map" href="#onnsc.sc.Sc.get_role_id_map">get_role_id_map</a></code></li>
 <li><code><a title="onnsc.sc.Sc.list_roles" href="#onnsc.sc.Sc.list_roles">list_roles</a></code></li>
